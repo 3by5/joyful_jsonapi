@@ -168,12 +168,12 @@ RSpec.shared_context 'movie class' do
     end
 
     class OwnerSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
     end
 
     # serializers
     class MovieSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       # director attr is not mentioned intentionally
       attributes :name, :release_year
@@ -198,12 +198,12 @@ RSpec.shared_context 'movie class' do
     end
 
     class MovieWithoutIdStructSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       attributes :name, :release_year
     end
 
     class CachingMovieSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name, :release_year
       has_many :actors
@@ -214,7 +214,7 @@ RSpec.shared_context 'movie class' do
     end
 
     class CachingMovieWithHasManySerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name, :release_year
       has_many :actors, cached: true
@@ -225,7 +225,7 @@ RSpec.shared_context 'movie class' do
     end
 
     class ActorSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :actor
       attributes :name, :email
       belongs_to :agency
@@ -234,14 +234,14 @@ RSpec.shared_context 'movie class' do
     end
 
     class AgencySerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       attributes :id, :name
       belongs_to :state
       has_many :actors
     end
 
     class AwardSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       attributes :id, :title
       attribute :year, if: Proc.new { |record, params|
         params[:include_award_year].present? ?
@@ -252,26 +252,26 @@ RSpec.shared_context 'movie class' do
     end
 
     class StateSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       attributes :id, :name
       has_many :agency
     end
 
     class AdvertisingCampaignSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       attributes :id, :name
       belongs_to :movie
     end
 
     class MovieTypeSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie_type
       attributes :name
       has_many :movies
     end
 
     class MovieSerializerWithAttributeBlock
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name, :release_year
       attribute :title_with_year do |record|
@@ -280,7 +280,7 @@ RSpec.shared_context 'movie class' do
     end
 
     class MovieSerializerWithAttributeBlock
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name, :release_year
       attribute :title_with_year do |record|
@@ -289,53 +289,53 @@ RSpec.shared_context 'movie class' do
     end
 
     class AgencySerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       attributes :id, :name
       has_many :actors
     end
 
     class SupplierSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :supplier
       has_one :account
     end
 
     class AccountSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :account
       belongs_to :supplier
     end
 
     class MovieOptionalRecordDataSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name
       attribute :release_year, if: Proc.new { |record| record.release_year >= 2000 }
     end
 
     class MovieOptionalParamsDataSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name
       attribute :director, if: Proc.new { |record, params| params[:admin] == true }
     end
 
     class MovieOptionalRelationshipSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name
       has_many :actors, if: Proc.new { |record| record.actors.any? }
     end
 
     class MovieOptionalRelationshipWithParamsSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name
       belongs_to :owner, record_type: :user, if: Proc.new { |record, params| params[:admin] == true }
     end
 
     class MovieOptionalAttributeContentsWithParamsSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :movie
       attributes :name
       attribute :director do |record, params|
@@ -354,7 +354,7 @@ RSpec.shared_context 'movie class' do
     module AppName
       module V1
         class MovieSerializer
-          include FastJsonapi::ObjectSerializer
+          include JoyfulJsonapi::ObjectSerializer
           # to test if compute_serializer_name works
         end
       end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FastJsonapi::ObjectSerializer do
+describe JoyfulJsonapi::ObjectSerializer do
   include_context "movie class"
   include_context 'group class'
 

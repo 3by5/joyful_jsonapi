@@ -5,10 +5,10 @@ require 'logger'
 # Usage:
 #   class Movie
 #     def to_json(payload)
-#       FastJsonapi::MultiToJson.to_json(payload)
+#       JoyfulJsonapi::MultiToJson.to_json(payload)
 #     end
 #   end
-module FastJsonapi
+module JoyfulJsonapi
   module MultiToJson
     # Result object pattern is from https://johnnunemaker.com/resilience-in-ruby/
     # e.g. https://github.com/github/github-ds/blob/fbda5389711edfb4c10b6c6bad19311dfcb1bac1/lib/github/result.rb
@@ -81,7 +81,7 @@ module FastJsonapi
     def self.to_json(object)
       _fast_to_json(object)
     rescue NameError
-      define_to_json(FastJsonapi::MultiToJson)
+      define_to_json(JoyfulJsonapi::MultiToJson)
       _fast_to_json(object)
     end
 

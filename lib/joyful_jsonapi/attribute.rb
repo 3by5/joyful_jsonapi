@@ -1,4 +1,4 @@
-module FastJsonapi
+module JoyfulJsonapi
   class Attribute
     attr_reader :key, :method, :conditional_proc
 

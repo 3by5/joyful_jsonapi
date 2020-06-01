@@ -5,18 +5,18 @@ require 'active_support/json'
 require 'active_support/concern'
 require 'active_support/inflector'
 require 'active_support/core_ext/numeric/time'
-require 'fast_jsonapi/attribute'
-require 'fast_jsonapi/relationship'
-require 'fast_jsonapi/link'
-require 'fast_jsonapi/serialization_core'
+require 'joyful_jsonapi/attribute'
+require 'joyful_jsonapi/relationship'
+require 'joyful_jsonapi/link'
+require 'joyful_jsonapi/serialization_core'
 
-module FastJsonapi
+module JoyfulJsonapi
   module ObjectSerializer
     extend ActiveSupport::Concern
     include SerializationCore
 
-    SERIALIZABLE_HASH_NOTIFICATION = 'render.fast_jsonapi.serializable_hash'
-    SERIALIZED_JSON_NOTIFICATION = 'render.fast_jsonapi.serialized_json'
+    SERIALIZABLE_HASH_NOTIFICATION = 'render.joyful_jsonapi.serializable_hash'
+    SERIALIZED_JSON_NOTIFICATION = 'render.joyful_jsonapi.serialized_json'
 
     included do
       # Set record_type based on the name of the serializer class
@@ -162,7 +162,7 @@ module FastJsonapi
       end
 
       def use_hyphen
-        warn('DEPRECATION WARNING: use_hyphen is deprecated and will be removed from fast_jsonapi 2.0 use (set_key_transform :dash) instead')
+        warn('DEPRECATION WARNING: use_hyphen is deprecated and will be removed from joyful_jsonapi 2.0 use (set_key_transform :dash) instead')
         set_key_transform :dash
       end
 

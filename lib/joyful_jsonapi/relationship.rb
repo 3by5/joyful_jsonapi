@@ -1,4 +1,4 @@
-module FastJsonapi
+module JoyfulJsonapi
   class Relationship
     attr_reader :key, :name, :id_method_name, :record_type, :object_method_name, :object_block, :serializer, :relationship_type, :cached, :polymorphic, :conditional_proc, :transform_method, :links, :lazy_load_data
 

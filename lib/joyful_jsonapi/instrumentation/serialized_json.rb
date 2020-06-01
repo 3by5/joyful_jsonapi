@@ -1,6 +1,6 @@
 require 'active_support/notifications'
 
-module FastJsonapi
+module JoyfulJsonapi
   module ObjectSerializer
 
     alias_method :serialized_json_without_instrumentation, :serialized_json

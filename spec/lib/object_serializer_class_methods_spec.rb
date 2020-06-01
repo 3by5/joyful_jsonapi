@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FastJsonapi::ObjectSerializer do
+describe JoyfulJsonapi::ObjectSerializer do
 
   include_context 'movie class'
 
@@ -258,7 +258,7 @@ describe FastJsonapi::ObjectSerializer do
     end
 
     it 'sets the correct transform_method when use_hyphen is used' do
-      warning_message = "DEPRECATION WARNING: use_hyphen is deprecated and will be removed from fast_jsonapi 2.0 use (set_key_transform :dash) instead\n"
+      warning_message = "DEPRECATION WARNING: use_hyphen is deprecated and will be removed from joyful_jsonapi 2.0 use (set_key_transform :dash) instead\n"
       expect { subject }.to output(warning_message).to_stderr
       expect(MovieSerializer.instance_variable_get(:@transform_method)).to eq :dasherize
     end
@@ -415,7 +415,7 @@ describe FastJsonapi::ObjectSerializer do
         movie_serializer_class = Object.const_set(movie_serializer_name, Class.new)
         # https://rubymonk.com/learning/books/5-metaprogramming-ruby-ascent/chapters/24-eval/lessons/67-instance-eval
         movie_serializer_class.instance_eval do
-          include FastJsonapi::ObjectSerializer
+          include JoyfulJsonapi::ObjectSerializer
           set_type :movie
           set_key_transform key_transform
           attributes :name, :release_year
@@ -425,7 +425,7 @@ describe FastJsonapi::ObjectSerializer do
         end
         movie_type_serializer_class = Object.const_set(movie_type_serializer_name, Class.new)
         movie_type_serializer_class.instance_eval do
-          include FastJsonapi::ObjectSerializer
+          include JoyfulJsonapi::ObjectSerializer
           set_key_transform key_transform
           attributes :name
         end

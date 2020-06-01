@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'active_support/concern'
-require 'fast_jsonapi/multi_to_json'
+require 'joyful_jsonapi/multi_to_json'
 
-module FastJsonapi
+module JoyfulJsonapi
   MandatoryField = Class.new(StandardError)
 
   module SerializationCore
@@ -94,7 +94,7 @@ module FastJsonapi
 
       # Override #to_json for alternative implementation
       def to_json(payload)
-        FastJsonapi::MultiToJson.to_json(payload) if payload.present?
+        JoyfulJsonapi::MultiToJson.to_json(payload) if payload.present?
       end
 
       def parse_include_item(include_item)

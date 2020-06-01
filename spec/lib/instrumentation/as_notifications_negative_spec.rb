@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FastJsonapi::ObjectSerializer do
+describe JoyfulJsonapi::ObjectSerializer do
   include_context 'movie class'
 
   context 'instrument' do
@@ -18,7 +18,7 @@ describe FastJsonapi::ObjectSerializer do
       it 'should send not notifications' do
         events = []
 
-        ActiveSupport::Notifications.subscribe(FastJsonapi::ObjectSerializer::SERIALIZABLE_HASH_NOTIFICATION) do |*args|
+        ActiveSupport::Notifications.subscribe(JoyfulJsonapi::ObjectSerializer::SERIALIZABLE_HASH_NOTIFICATION) do |*args|
           events << ActiveSupport::Notifications::Event.new(*args)
         end
 
@@ -38,7 +38,7 @@ describe FastJsonapi::ObjectSerializer do
       it 'should send not notifications' do
         events = []
 
-        ActiveSupport::Notifications.subscribe(FastJsonapi::ObjectSerializer::SERIALIZED_JSON_NOTIFICATION) do |*args|
+        ActiveSupport::Notifications.subscribe(JoyfulJsonapi::ObjectSerializer::SERIALIZED_JSON_NOTIFICATION) do |*args|
           events << ActiveSupport::Notifications::Event.new(*args)
         end
 

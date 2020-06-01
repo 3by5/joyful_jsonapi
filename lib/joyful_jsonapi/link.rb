@@ -1,4 +1,4 @@
-module FastJsonapi
+module JoyfulJsonapi
   class Link
     attr_reader :key, :method
 

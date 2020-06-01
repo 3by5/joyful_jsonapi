@@ -1,11 +1,11 @@
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-require "fast_jsonapi/version"
+require "joyful_jsonapi/version"
 
 Gem::Specification.new do |gem|
-  gem.name = "at_fast_jsonapi"
-  gem.version = FastJsonapi::VERSION
+  gem.name = "joyful_jsonapi"
+  gem.version = JoyfulJsonapi::VERSION
 
   gem.required_ruby_version = '>= 2.0.0' if gem.respond_to? :required_ruby_version=
   gem.required_rubygems_version = Gem::Requirement.new(">= 0") if gem.respond_to? :required_rubygems_version=
@@ -19,10 +19,10 @@ Gem::Specification.new do |gem|
     "README.md"
   ]
   gem.files = Dir["lib/**/*"]
-  gem.homepage = "https://github.com/agile-tools-org/at_fast_jsonapi"
+  gem.homepage = "https://github.com/agile-tools-org/joyful_jsonapi"
   gem.licenses = ["Apache-2.0"]
   gem.rubygems_version = "2.5.1"
-  gem.summary = "fast JSON API(jsonapi.org) serializer, forked from Netfliex/fast_jsonapi"
+  gem.summary = "JSON API(jsonapi.org) tools for joyful development, forked from Netfliex/fast_jsonapi"
 
   gem.add_runtime_dependency(%q<activesupport>, [">= 4.2"])
   gem.add_development_dependency(%q<activerecord>, [">= 4.2"])

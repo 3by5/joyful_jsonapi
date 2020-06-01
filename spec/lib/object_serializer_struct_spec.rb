@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FastJsonapi::ObjectSerializer do
+describe JoyfulJsonapi::ObjectSerializer do
   include_context 'movie class'
 
   context 'when testing object serializer with ruby struct' do
@@ -34,7 +34,7 @@ describe FastJsonapi::ObjectSerializer do
     context 'struct without id' do
       it 'returns correct hash when serializable_hash is called' do
         serializer = MovieWithoutIdStructSerializer.new(movie_struct_without_id)
-        expect { serializer.serializable_hash }.to raise_error(FastJsonapi::MandatoryField)
+        expect { serializer.serializable_hash }.to raise_error(JoyfulJsonapi::MandatoryField)
       end
     end
   end

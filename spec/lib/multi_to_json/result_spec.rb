@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module FastJsonapi
+module JoyfulJsonapi
   module MultiToJson
     describe Result do
       it 'supports chaining of rescues' do

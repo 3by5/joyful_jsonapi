@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FastJsonapi::ObjectSerializer do
+describe JoyfulJsonapi::ObjectSerializer do
 
   after(:all) do
     classes_to_remove = %i[
@@ -37,7 +37,7 @@ describe FastJsonapi::ObjectSerializer do
   end
 
   class UserSerializer
-    include FastJsonapi::ObjectSerializer
+    include JoyfulJsonapi::ObjectSerializer
     set_type :user
     attributes :first_name, :last_name
 
@@ -55,7 +55,7 @@ describe FastJsonapi::ObjectSerializer do
   end
 
   class PhotoSerializer
-    include FastJsonapi::ObjectSerializer
+    include JoyfulJsonapi::ObjectSerializer
     attributes :id, :name
   end
 
@@ -64,7 +64,7 @@ describe FastJsonapi::ObjectSerializer do
   end
 
   class CountrySerializer
-    include FastJsonapi::ObjectSerializer
+    include JoyfulJsonapi::ObjectSerializer
     attributes :name
   end
 
@@ -88,7 +88,7 @@ describe FastJsonapi::ObjectSerializer do
   end
 
   class EmployeeSerializer < UserSerializer
-    include FastJsonapi::ObjectSerializer
+    include JoyfulJsonapi::ObjectSerializer
     attributes :location
     attributes :compensation
 

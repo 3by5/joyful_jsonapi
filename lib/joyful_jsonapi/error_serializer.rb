@@ -1,5 +1,5 @@
 
-module FastJsonapi
+module JoyfulJsonapi
   class ErrorSerializer
 
     def initialize(model)

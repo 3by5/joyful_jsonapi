@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FastJsonapi::ObjectSerializer do
+describe JoyfulJsonapi::ObjectSerializer do
   include_context 'movie class'
   include_context 'group class'
 
@@ -302,21 +302,21 @@ describe FastJsonapi::ObjectSerializer do
   context 'when testing included do block of object serializer' do
     it 'should set default_type based on serializer class name' do
       class BlahSerializer
-        include FastJsonapi::ObjectSerializer
+        include JoyfulJsonapi::ObjectSerializer
       end
       expect(BlahSerializer.record_type).to be :blah
     end
 
     it 'should set default_type for a multi word class name' do
       class BlahBlahSerializer
-        include FastJsonapi::ObjectSerializer
+        include JoyfulJsonapi::ObjectSerializer
       end
       expect(BlahBlahSerializer.record_type).to be :blah_blah
     end
 
     it 'shouldnt set default_type for a serializer that doesnt follow convention' do
       class BlahBlahSerializerBuilder
-        include FastJsonapi::ObjectSerializer
+        include JoyfulJsonapi::ObjectSerializer
       end
       expect(BlahBlahSerializerBuilder.record_type).to be_nil
     end
@@ -324,7 +324,7 @@ describe FastJsonapi::ObjectSerializer do
     it 'should set default_type for a namespaced serializer' do
       module V1
         class BlahSerializer
-          include FastJsonapi::ObjectSerializer
+          include JoyfulJsonapi::ObjectSerializer
         end
       end
       expect(V1::BlahSerializer.record_type).to be :blah
@@ -403,7 +403,7 @@ describe FastJsonapi::ObjectSerializer do
 
       context 'collection will fail without id' do
         let(:resource) { [movie] }
-        it { expect { subject }.to raise_error(FastJsonapi::MandatoryField, /id is a mandatory field/) }
+        it { expect { subject }.to raise_error(JoyfulJsonapi::MandatoryField, /id is a mandatory field/) }
       end
 
       context 'single will pass' do

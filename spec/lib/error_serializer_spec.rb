@@ -8,13 +8,13 @@ class TestModel
   validates :bar, numericality: true
 end
 
-RSpec.describe FastJsonapi::ErrorSerializer do
+RSpec.describe JoyfulJsonapi::ErrorSerializer do
   let(:model) { TestModel }
 
   describe '#serializable_hash' do
     let(:model_instance) { model.new(foo: nil, bar: 'One') }
     it 'returns a jsonapi complliant error array' do
-      expect(FastJsonapi::ErrorSerializer.new(model_instance).serializable_hash).to eq({
+      expect(JoyfulJsonapi::ErrorSerializer.new(model_instance).serializable_hash).to eq({
       errors: [
         {
           status: "422",

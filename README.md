@@ -1,8 +1,12 @@
-# Fast JSON API (Agile Tools Fork)
+# Joyful JSON API
+
+This project is forked from [fast_jsonapi](https://github.com/Netflix/fast_jsonapi)
 
 [![Build Status](https://travis-ci.org/Netflix/fast_jsonapi.svg?branch=master)](https://travis-ci.org/Netflix/fast_jsonapi)
 
 A lightning fast [JSON:API](http://jsonapi.org/) serializer for Ruby Objects.
+
+With this fork, we're expanding the scope of the original gem a bit. Instead of just fast jsonapi compliant responses, we want to end up with a simple toolkit to enable a rails server to quack like JSON:API with a minimum amount of developer effort.
 
 # Performance Comparison
 
@@ -18,23 +22,41 @@ Fast JSON API serialized 250 records in 3.01 ms
 
 # Table of Contents
 
-* [Features](#features)
-* [Installation](#installation)
-* [Usage](#usage)
-  * [Rails Generator](#rails-generator)
-  * [Model Definition](#model-definition)
-  * [Serializer Definition](#serializer-definition)
-  * [Object Serialization](#object-serialization)
-  * [Compound Document](#compound-document)
-  * [Key Transforms](#key-transforms)
-  * [Collection Serialization](#collection-serialization)
-  * [Caching](#caching)
-  * [Params](#params)
-  * [Conditional Attributes](#conditional-attributes)
-  * [Conditional Relationships](#conditional-relationships)
-  * [Sparse Fieldsets](#sparse-fieldsets)
-  * [Using helper methods](#using-helper-methods)
-* [Contributing](#contributing)
+- [Joyful JSON API](#joyful-json-api)
+- [Performance Comparison](#performance-comparison)
+  - [Benchmark times for 250 records](#benchmark-times-for-250-records)
+- [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Rails Generator](#rails-generator)
+    - [Model Definition](#model-definition)
+    - [Serializer Definition](#serializer-definition)
+    - [Sample Object](#sample-object)
+    - [Object Serialization](#object-serialization)
+      - [Return a hash](#return-a-hash)
+      - [Return Serialized JSON](#return-serialized-json)
+      - [Serialized Output](#serialized-output)
+    - [Key Transforms](#key-transforms)
+    - [Attributes](#attributes)
+    - [Links Per Object](#links-per-object)
+      - [Links on a Relationship](#links-on-a-relationship)
+    - [Meta Per Resource](#meta-per-resource)
+    - [Compound Document](#compound-document)
+    - [Collection Serialization](#collection-serialization)
+      - [Control Over Collection Serialization](#control-over-collection-serialization)
+    - [Caching](#caching)
+    - [Params](#params)
+    - [Conditional Attributes](#conditional-attributes)
+    - [Conditional Relationships](#conditional-relationships)
+    - [Sparse Fieldsets](#sparse-fieldsets)
+    - [Using helper methods](#using-helper-methods)
+        - [Using ActiveSupport::Concern](#using-activesupportconcern)
+        - [Using Plain Old Ruby](#using-plain-old-ruby)
+    - [Customizable Options](#customizable-options)
+    - [Instrumentation](#instrumentation)
+  - [Contributing](#contributing)
+    - [Running Tests](#running-tests)
 
 
 ## Features
@@ -50,7 +72,7 @@ Fast JSON API serialized 250 records in 3.01 ms
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'fast_jsonapi'
+gem 'joyful_jsonapi'
 ```
 
 Execute:
@@ -81,7 +103,7 @@ end
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
   set_type :movie  # optional
   set_id :owner_id # optional
   attributes :name, :year
@@ -156,7 +178,7 @@ By default fast_jsonapi underscores the key names. It supports the same key tran
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
   # Available options :camel, :camel_lower, :dash, :underscore(default)
   set_key_transform :camel
 end
@@ -171,13 +193,13 @@ set_key_transform :underscore # "some_key" => "some_key"
 ```
 
 ### Attributes
-Attributes are defined in FastJsonapi using the `attributes` method.  This method is also aliased as `attribute`, which is useful when defining a single attribute.
+Attributes are defined in JoyfulJsonapi using the `attributes` method.  This method is also aliased as `attribute`, which is useful when defining a single attribute.
 
 By default, attributes are read directly from the model property of the same name.  In this example, `name` is expected to be a property of the object being serialized:
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   attribute :name
 end
@@ -187,7 +209,7 @@ Custom attributes that must be serialized but do not exist on the model can be d
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   attributes :name, :year
 
@@ -201,7 +223,7 @@ The block syntax can also be used to override the property on the object:
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   attribute :name do |object|
     "#{object.name} Part 2"
@@ -213,7 +235,7 @@ Attributes can also use a different name by passing the original method or acces
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   attributes :name
 
@@ -222,7 +244,7 @@ end
 ```
 
 ### Links Per Object
-Links are defined in FastJsonapi using the `link` method. By default, links are read directly from the model property of the same name. In this example, `public_url` is expected to be a property of the object being serialized.
+Links are defined in JoyfulJsonapi using the `link` method. By default, links are read directly from the model property of the same name. In this example, `public_url` is expected to be a property of the object being serialized.
 
 You can configure the method to use on the object for example a link with key `self` will get set to the value returned by a method called `url` on the movie object.
 
@@ -230,7 +252,7 @@ You can also use a block to define a url as shown in `custom_url`. You can acces
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   link :public_url
 
@@ -252,7 +274,7 @@ You can specify [relationship links](http://jsonapi.org/format/#document-resourc
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   has_many :actors, links: {
     self: :url,
@@ -281,7 +303,7 @@ For every resource in the collection, you can include a meta object containing n
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   meta do |movie|
     {
@@ -345,7 +367,7 @@ Requires a `cache_key` method be defined on model:
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
   set_type :movie  # optional
   cache_options enabled: true, cache_length: 12.hours
   attributes :name, :year
@@ -365,7 +387,7 @@ block you opt-in to using params by adding it as a block parameter.
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   attributes :name, :year
   attribute :can_view_early do |movie, params|
@@ -394,7 +416,7 @@ Conditional attributes can be defined by passing a Proc to the `if` key on the `
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   attributes :name, :year
   attribute :release_year, if: Proc.new { |record|
@@ -420,7 +442,7 @@ Conditional relationships can be defined by passing a Proc to the `if` key. Retu
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   # Actors will only be serialized if the record has any associated actors
   has_many :actors, if: Proc.new { |record| record.actors.any? }
@@ -441,7 +463,7 @@ Attributes and relationships can be selectively returned per record type by usin
 
 ```ruby
 class MovieSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   attributes :name, :year
 end
@@ -472,7 +494,7 @@ module AvatarHelper
 end
 
 class UserSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   include AvatarHelper # mixes in your helper method as class method
 
@@ -497,7 +519,7 @@ module AvatarHelper
 end
 
 class UserSerializer
-  include FastJsonapi::ObjectSerializer
+  include JoyfulJsonapi::ObjectSerializer
 
   extend AvatarHelper # mixes in your helper method as class method
 
@@ -542,8 +564,8 @@ require 'fast_jsonapi/instrumentation'
 ```
 
 The two instrumented notifcations are supplied by these two constants:
-* `FastJsonapi::ObjectSerializer::SERIALIZABLE_HASH_NOTIFICATION`
-* `FastJsonapi::ObjectSerializer::SERIALIZED_JSON_NOTIFICATION`
+* `JoyfulJsonapi::ObjectSerializer::SERIALIZABLE_HASH_NOTIFICATION`
+* `JoyfulJsonapi::ObjectSerializer::SERIALIZED_JSON_NOTIFICATION`
 
 It is also possible to instrument one method without the other by using one of the following require statements:
 

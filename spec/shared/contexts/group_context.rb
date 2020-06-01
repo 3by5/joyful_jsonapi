@@ -13,13 +13,13 @@ RSpec.shared_context 'group class' do
 
     # serializers
     class PersonSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :person
       attributes :first_name, :last_name
     end
 
     class GroupSerializer
-      include FastJsonapi::ObjectSerializer
+      include JoyfulJsonapi::ObjectSerializer
       set_type :group
       attributes :name
       has_many :groupees, polymorphic: true

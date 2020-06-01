@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FastJsonapi::ObjectSerializer, performance: true do
+describe JoyfulJsonapi::ObjectSerializer, performance: true do
   include_context 'movie class'
   include_context 'ams movie class'
   include_context 'jsonapi movie class'
@@ -15,7 +15,7 @@ describe FastJsonapi::ObjectSerializer, performance: true do
   after(:all) { GC.enable }
 
   SERIALIZERS = {
-    fast_jsonapi: {
+    joyful_jsonapi: {
       name: 'Fast Serializer',
       hash_method: :serializable_hash,
       json_method: :serialized_json
@@ -72,12 +72,12 @@ describe FastJsonapi::ObjectSerializer, performance: true do
     puts format("%-#{name_length+1}s %-10s %-10s %s", 'Serializer', 'Records', 'Time', 'Speed Up')
 
     report_format = "%-#{name_length+1}s %-10s %-10s"
-    fast_jsonapi_time = data[:fast_jsonapi][:time]
-    puts format(report_format, 'Fast serializer', count, fast_jsonapi_time.round(2).to_s + ' ms')
+    joyful_jsonapi_time = data[:joyful_jsonapi][:time]
+    puts format(report_format, 'Fast serializer', count, joyful_jsonapi_time.round(2).to_s + ' ms')
 
-    data.reject { |k,v| k == :fast_jsonapi }.each_pair do |k,v|
+    data.reject { |k,v| k == :joyful_jsonapi }.each_pair do |k,v|
       t = v[:time]
-      factor = t / fast_jsonapi_time
+      factor = t / joyful_jsonapi_time
 
       speed_factor = SERIALIZERS[k].fetch(:speed_factor, 1)
       result = factor >= speed_factor ? '✔' : '✘'
@@ -122,7 +122,7 @@ describe FastJsonapi::ObjectSerializer, performance: true do
         jsonapis_movies = build_js_movies(movie_count)
 
         serializers = {
-          fast_jsonapi: MovieSerializer.new(movies),
+          joyful_jsonapi: MovieSerializer.new(movies),
           ams: ActiveModelSerializers::SerializableResource.new(ams_movies),
           jsonapi: JSONAPISerializer.new(jsonapi_movies),
           jsonapis: JSONAPISSerializer.new(jsonapis_movies)
@@ -135,11 +135,11 @@ describe FastJsonapi::ObjectSerializer, performance: true do
         hash_benchmarks = run_hash_benchmark(message, movie_count, serializers)
 
         # json
-        expect(json_benchmarks[:fast_jsonapi][:json].length).to eq json_benchmarks[:ams][:json].length
-        json_speed_up = json_benchmarks[:ams][:time] / json_benchmarks[:fast_jsonapi][:time]
+        expect(json_benchmarks[:joyful_jsonapi][:json].length).to eq json_benchmarks[:ams][:json].length
+        json_speed_up = json_benchmarks[:ams][:time] / json_benchmarks[:joyful_jsonapi][:time]
 
         # hash
-        hash_speed_up = hash_benchmarks[:ams][:time] / hash_benchmarks[:fast_jsonapi][:time]
+        hash_speed_up = hash_benchmarks[:ams][:time] / hash_benchmarks[:joyful_jsonapi][:time]
         expect(hash_speed_up).to be >= SERIALIZERS[:ams][:speed_factor]
       end
     end
@@ -158,7 +158,7 @@ describe FastJsonapi::ObjectSerializer, performance: true do
         options[:include] = [:actors, :movie_type]
 
         serializers = {
-          fast_jsonapi: MovieSerializer.new(movies, options),
+          joyful_jsonapi: MovieSerializer.new(movies, options),
           ams: ActiveModelSerializers::SerializableResource.new(ams_movies, include: options[:include], meta: options[:meta]),
           jsonapi: JSONAPISerializer.new(jsonapi_movies, include: options[:include], meta: options[:meta]),
           jsonapis: JSONAPISSerializer.new(jsonapis_movies, include: options[:include].map { |i| i.to_s.dasherize }, meta: options[:meta])
@@ -171,11 +171,11 @@ describe FastJsonapi::ObjectSerializer, performance: true do
         hash_benchmarks = run_hash_benchmark(message, movie_count, serializers)
 
         # json
-        expect(json_benchmarks[:fast_jsonapi][:json].length).to eq json_benchmarks[:ams][:json].length
-        json_speed_up = json_benchmarks[:ams][:time] / json_benchmarks[:fast_jsonapi][:time]
+        expect(json_benchmarks[:joyful_jsonapi][:json].length).to eq json_benchmarks[:ams][:json].length
+        json_speed_up = json_benchmarks[:ams][:time] / json_benchmarks[:joyful_jsonapi][:time]
 
         # hash
-        hash_speed_up = hash_benchmarks[:ams][:time] / hash_benchmarks[:fast_jsonapi][:time]
+        hash_speed_up = hash_benchmarks[:ams][:time] / hash_benchmarks[:joyful_jsonapi][:time]
         expect(hash_speed_up).to be >= SERIALIZERS[:ams][:speed_factor]
       end
     end
@@ -192,7 +192,7 @@ describe FastJsonapi::ObjectSerializer, performance: true do
         options = {}
 
         serializers = {
-          fast_jsonapi: GroupSerializer.new(groups, options),
+          joyful_jsonapi: GroupSerializer.new(groups, options),
           ams: ActiveModelSerializers::SerializableResource.new(ams_groups),
           jsonapi: JSONAPISerializerB.new(jsonapi_groups),
           jsonapis: JSONAPISSerializerB.new(jsonapis_groups)
@@ -205,11 +205,11 @@ describe FastJsonapi::ObjectSerializer, performance: true do
         hash_benchmarks = run_hash_benchmark(message, group_count, serializers)
 
         # json
-        expect(json_benchmarks[:fast_jsonapi][:json].length).to eq json_benchmarks[:ams][:json].length
-        json_speed_up = json_benchmarks[:ams][:time] / json_benchmarks[:fast_jsonapi][:time]
+        expect(json_benchmarks[:joyful_jsonapi][:json].length).to eq json_benchmarks[:ams][:json].length
+        json_speed_up = json_benchmarks[:ams][:time] / json_benchmarks[:joyful_jsonapi][:time]
 
         # hash
-        hash_speed_up = hash_benchmarks[:ams][:time] / hash_benchmarks[:fast_jsonapi][:time]
+        hash_speed_up = hash_benchmarks[:ams][:time] / hash_benchmarks[:joyful_jsonapi][:time]
         expect(hash_speed_up).to be >= SERIALIZERS[:ams][:speed_factor]
       end
     end

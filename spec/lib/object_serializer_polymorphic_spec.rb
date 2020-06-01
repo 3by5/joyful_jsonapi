@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FastJsonapi::ObjectSerializer do
+describe JoyfulJsonapi::ObjectSerializer do
   class List
     attr_accessor :id, :name, :items
   end
@@ -14,7 +14,7 @@ describe FastJsonapi::ObjectSerializer do
   end
 
   class ListSerializer
-    include FastJsonapi::ObjectSerializer
+    include JoyfulJsonapi::ObjectSerializer
     set_type :list
     attributes :name
     set_key_transform :dash
