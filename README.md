@@ -54,6 +54,7 @@ Fast JSON API serialized 250 records in 3.01 ms
         - [Using ActiveSupport::Concern](#using-activesupportconcern)
         - [Using Plain Old Ruby](#using-plain-old-ruby)
     - [Customizable Options](#customizable-options)
+    - [Parsing Incoming Params](#parsing-incoming-params)
     - [Instrumentation](#instrumentation)
   - [Contributing](#contributing)
     - [Running Tests](#running-tests)
@@ -548,6 +549,34 @@ record_type | Set custom Object Type for a relationship | ```belongs_to :owner, 
 serializer | Set custom Serializer for a relationship | ```has_many :actors, serializer: :custom_actor``` or ```has_many :actors, serializer: MyApp::Api::V1::ActorSerializer```
 polymorphic | Allows different record types for a polymorphic association | ```has_many :targets, polymorphic: true```
 polymorphic | Sets custom record types for each object class in a polymorphic association | ```has_many :targets, polymorphic: { Person => :person, Group => :group }```
+
+### Parsing Incoming Params
+
+It's easy enough to parse incoming JSON:API parameters with regular strong params:
+
+```
+params.require(:data).require(:attributes).permit(:foo, :bar, :baz)
+```
+
+However when you introduce relationships it gets complicated. Joyful JSON:API ships a simple controller macro for turning a jsonapi incoming payload into a rails-friendly one.
+
+```ruby
+class ApplicationController < ActionController::Base
+  include JoyfulJsonapi::ParameterParser
+end
+```
+
+Then in your resource specific controller you can do this:
+
+```ruby
+class FoosController < ApplicationController
+  translate_jsonapi_params only: %w(create update)
+
+  def foo_params
+    params.require(:foo).permit(:bar, :baz)
+  end
+end
+```
 
 ### Instrumentation
 

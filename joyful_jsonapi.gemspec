@@ -25,6 +25,7 @@ Gem::Specification.new do |gem|
   gem.summary = "JSON API(jsonapi.org) tools for joyful development, forked from Netfliex/fast_jsonapi"
 
   gem.add_runtime_dependency(%q<activesupport>, [">= 4.2"])
+  gem.add_runtime_dependency(%q<actionpack>, [">= 4.2"])
   gem.add_development_dependency(%q<activerecord>, [">= 4.2"])
   gem.add_development_dependency(%q<activemodel>, [">= 4.2"])
   gem.add_development_dependency(%q<skylight>, ["~> 1.3"])
